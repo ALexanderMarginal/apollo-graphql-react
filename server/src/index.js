@@ -1,7 +1,9 @@
 const {ApolloServer, MockList} = require('apollo-server');
 const typeDefs = require('./schema');
+const resolvers = require('./resolvers');
+const TrackAPI = require('./resources/track-api');
 
-const mocks = {
+/*const mocks = {
     Query: () => ({
         tracksForHome: () => new MockList([6, 9])
     }),
@@ -20,11 +22,17 @@ const mocks = {
         length: () => 1210,
         modulesCount: () => 6
     })
-};
+};*/
 
 const server = new ApolloServer({
     typeDefs,
-    mocks,
+    // mocks: mocks,
+    resolvers,
+    dataSources: () => {
+        return {
+            trackAPI: new TrackAPI(),
+        }
+    }
 });
 
 server.listen().then(() => {
